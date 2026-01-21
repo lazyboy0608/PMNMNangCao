@@ -21,6 +21,9 @@ Route::prefix('sinhvien')->group(function () {
         return view('sinhvien.info', ['name' => $name, 'mssv' => $mssv]);
     })->name('info');
 });
+Route::get('/banco/{n}', function (int $n) {
+    return view('banco', ['n' => $n]);
+})->name('banco');
 Route::fallback(function () {
     return view('error.404');
 });
