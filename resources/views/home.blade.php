@@ -8,5 +8,6 @@
 <body>
     <h1>Home</h1>
     <h2>Hello World!</h2>
+    <a href="/product/">Product</a>
 </body>
 </html>

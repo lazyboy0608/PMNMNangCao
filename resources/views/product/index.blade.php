@@ -25,31 +25,22 @@
 </head>
 
 <body>
-    <h1>Product Index</h1>
+    <h1>{{ $title }}</h1>
     <table>
         <tr>
+            <th>ID</th>
             <th>Product Name</th>
             <th>Price</th>
         </tr>
+        @foreach ($products as $product)
         <tr>
-            <td>Product 1</td>
-            <td>$10.00</td>
+            <td>{{ $product['id'] }}</td>
+            <td>{{ $product['name'] }}</td>
+            <td>${{ number_format($product['price'], 2) }}</td>
         </tr>
-        <tr>
-            <td>Product 2</td>
-            <td>$20.00</td>
-        </tr>
-        <tr>
-            <td>Product 3</td>
-            <td>$30.00</td>
-        </tr>
-        <tr>
-            <td>Product 4</td>
-            <td>$40.00</td>
-        </tr>
+        @endforeach
     </table>
-
-    <a href="/product/add">Add New Product</a>
+    <a href="{{ route('add') }}">Add New Product</a>
 </body>
 
 </html>

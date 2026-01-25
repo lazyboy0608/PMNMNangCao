@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Add Product</h1>
-    <form action="/product/add" method="POST">
+    <form action="/product/store" method="POST">
         @csrf
         <label for="name">Product Name:</label>
         <input type="text" id="name" name="name" required>
@@ -16,5 +16,6 @@
         <input type="number" id="price" name="price" required>
         <br><br>
         <button type="submit">Add Product</button>
+    </form>
 </body>
 </html>
