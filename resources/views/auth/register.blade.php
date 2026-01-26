@@ -96,7 +96,7 @@
     <div>
         <h1>Register</h1>
         
-        <form action="/register" method="POST">
+        <form action="/checkRegister" method="POST">
             @csrf
             
             <div class="form-group">

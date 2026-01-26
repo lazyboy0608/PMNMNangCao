@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use App\Http\Middleware\CheckTimeAccess;
 
-class ProductController extends Controller
+class ProductController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [CheckTimeAccess::class];
+    }
     public function index()
     {
         $title = "Product List";
@@ -23,23 +29,10 @@ class ProductController extends Controller
     }
     public function store(Request $request)
     {
-        // Logic to store the new product
         dd($request->all());
     }
     public function getDetail(string $id = "123")
     {
         return view('product.detail', ['id' => $id]);
-    }
-    public function login()
-    {
-        return view('login');
-    }
-    public function checkLogin(Request $request)
-    {
-        if($request->input('username') === 'vietnh' && $request->input('password') === '1') {
-            return "Login successful!";
-        } else {
-            return "Login failed!";
-        }
     }
 }
