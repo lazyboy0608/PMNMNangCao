@@ -95,7 +95,7 @@
     <div>
         <h1>Login</h1>
         
-        <form action="/checkLogin" method="POST">
+        <form action="/auth/checkLogin" method="POST">
             @csrf
             
             <div class="form-group">

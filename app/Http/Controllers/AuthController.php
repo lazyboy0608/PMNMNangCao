@@ -7,13 +7,17 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
 
-    public function register()
+    public function signIn()
     {
-        return view('auth.register');
+        return view('auth.signIn');
     }
-    public function checkRegister(Request $request)
+    public function checkSignIn(Request $request)
     {
-        dd($request->all());
+        if($request->input('username') === 'vietnh' && $request->input('password') === $request->input('cfpassword') && $request->input('mssv') === '292867' && $request->input('class') === '67pm1' && $request->input('gender') === 'nam') {
+            return "Sign In successful!";
+        } else {
+            return "Sign In failed!";
+        }
     }
     public function login()
     {
@@ -33,9 +37,11 @@ class AuthController extends Controller
     }
     public function checkAge(Request $request)
     {
+        $age = $request->input('age');
+        session(['age' => $age]);
         return response()->json([
             'message' => 'Access granted: You are old enough.',
-            'age' => $request->input('age')
+            'age' => $age
         ]);
     }
 }

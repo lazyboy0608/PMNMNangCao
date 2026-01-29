@@ -12,8 +12,8 @@ Route::get('/', function () {
 //Auth Routes
 Route::prefix('auth')->group(function () {
     Route::controller(AuthController::class)->group(function () {
-        Route::get('/register', 'register');
-        Route::post('/checkRegister', 'checkRegister');
+        Route::get('/signIn', 'signIn');
+        Route::post('/checkSignIn', 'checkSignIn');
         Route::get('/login', 'login');
         Route::post('/checkLogin', 'checkLogin');
         Route::get('/getAge', 'getAge');
@@ -29,7 +29,6 @@ Route::prefix('product')->group(function () {
         Route::get('/{id?}', 'getDetail');
     });
 });
-Route::resource('test', TestController::class);
 Route::prefix('sinhvien')->group(function () {
     Route::get('/{name?}/{mssv?}', function (?string $name = "Luong Xuan Hieu", ?string $mssv = "123456") {
         return view('sinhvien.info', ['name' => $name, 'mssv' => $mssv]);

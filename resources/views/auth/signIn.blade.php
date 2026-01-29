@@ -94,32 +94,39 @@
 </head>
 <body>
     <div>
-        <h1>Register</h1>
+        <h1>Sign In</h1>
         
-        <form action="/checkRegister" method="POST">
+        <form action="/auth/checkSignIn" method="POST">
             @csrf
             
             <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" value="{{ old('name') }}" required>
+                <label for="username">User Name:</label>
+                <input type="text" id="username" name="username" value="{{ old('username') }}" required>
             </div>
             
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" value="{{ old('email') }}" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" value="{{ old('password') }}" required>
             </div>
             
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <label for="cfpassword">Confirm Password:</label>
+                <input type="password" id="cfpassword" name="cfpassword" required>
             </div>
             
             <div class="form-group">
-                <label for="password_confirmation">Confirm Password</label>
-                <input type="password" id="password_confirmation" name="password_confirmation" required>
+                <label for="mssv">MSSV:</label>
+                <input type="text" id="mssv" name="mssv" value="{{ old('mssv') }}" required>
             </div>
-            
-            <button type="submit" class="btn">Register</button>
+            <div class="form-group">
+                <label for="class">Class</label>
+                <input type="text" id="class" name="class" value="{{ old('class') }}" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <input type="text" id="gender" name="gender" value="{{ old('gender') }}" required>
+            </div>
+            <button type="submit" class="btn">Sign In</button>
         </form>
         
         <div class="link-login">
