@@ -3,14 +3,16 @@
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TestController;
 use App\Http\Middleware\CheckValidAge;
 
 Route::get('/', function () {
     return view('home');
 });
+Route::get('/admin', function () {
+    return view('layout.admin');
+});
 //Auth Routes
-Route::prefix('auth')->group(function () {
+Route::prefix('')->group(function () {
     Route::controller(AuthController::class)->group(function () {
         Route::get('/signIn', 'signIn');
         Route::post('/checkSignIn', 'checkSignIn');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -25,10 +26,11 @@ class AuthController extends Controller
     }
     public function checkLogin(Request $request)
     {
-        if($request->input('username') === 'vietnh' && $request->input('password') === '1') {
-            return "Login successful!";
+        $account = $request->only('email', 'password');
+        if(Auth::attempt($account)) {
+            return redirect('/product');
         } else {
-            return "Login failed!";
+            return redirect('/login')->with('error', 'Invalid credentials');
         }
     }
     public function getAge()
