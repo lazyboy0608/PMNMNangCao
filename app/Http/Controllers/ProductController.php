@@ -2,37 +2,92 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
 use App\Http\Middleware\CheckTimeAccess;
+use Illuminate\Http\Request;
+use App\Models\Product;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
 class ProductController extends Controller implements HasMiddleware
 {
-    public static function middleware(): array
+    public static function middleware()
     {
         return [CheckTimeAccess::class];
     }
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $title = "Product List";
-        return view('product.index', ['title' => $title,
-            'products' => [
-                ['id' => 1, 'name' => 'Product A', 'price' => 100],
-                ['id' => 2, 'name' => 'Product B', 'price' => 200],
-                ['id' => 3, 'name' => 'Product C', 'price' => 300],
-            ]
-        ]);
+        //
+        $product = Product::all();
+        return view('product.index', ['products' => $product]);
     }
+
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
+        //
         return view('product.add');
     }
+
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        dd($request->all());
+        //
+        $product = new Product;
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->stock = $request->stock;
+        $product->save();
+        return redirect('/product');
     }
-    public function getDetail(string $id = "123")
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
-        return view('product.detail', ['id' => $id]);
+        //
+        $product = Product::find($id);
+        return view('product.detail', ['product' => $product]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+        $product = Product::find($id);
+        return view('product.edit', ['product' => $product]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+        $product = Product::find($id);
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->stock = $request->stock;
+        $product->save();
+        return redirect('/product');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+        $product = Product::find($id);
+        $product->delete();
+        return redirect('/product');
     }
 }

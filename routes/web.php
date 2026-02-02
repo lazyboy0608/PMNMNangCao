@@ -25,10 +25,14 @@ Route::prefix('product')->group(function () {
     Route::controller(ProductController::class)->group(function () {
         Route::get('/', 'index');
         Route::get('/add', 'create')->name('add');
-        Route::post('/store', 'store');
-        Route::get('/{id?}', 'getDetail');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{id?}', 'show')->name('detail');
+        Route::get('/edit/{id?}', 'edit')->name('edit');
+        Route::post('/update/{id?}', 'update')->name('update');
+        Route::delete('/delete/{id?}', 'destroy')->name('delete');
     });
 });
+// Route::resource('products', ProductController::class);
 Route::prefix('sinhvien')->group(function () {
     Route::get('/{name?}/{mssv?}', function (?string $name = "Luong Xuan Hieu", ?string $mssv = "123456") {
         return view('sinhvien.info', ['name' => $name, 'mssv' => $mssv]);
