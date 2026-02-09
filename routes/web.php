@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckValidAge;
 
@@ -29,6 +30,17 @@ Route::prefix('product')->group(function () {
         Route::get('/add', 'create')->name('add');
         Route::post('/store', 'store')->name('store');
         Route::get('/{id?}', 'show')->name('detail');
+        Route::get('/edit/{id?}', 'edit')->name('edit');
+        Route::post('/update/{id?}', 'update')->name('update');
+        Route::delete('/delete/{id?}', 'destroy')->name('delete');
+    });
+});
+//Category Routes
+Route::prefix('category')->group(function () {
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::get('/add', 'create')->name('add');
+        Route::post('/store', 'store')->name('store');
         Route::get('/edit/{id?}', 'edit')->name('edit');
         Route::post('/update/{id?}', 'update')->name('update');
         Route::delete('/delete/{id?}', 'destroy')->name('delete');

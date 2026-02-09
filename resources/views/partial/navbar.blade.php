@@ -8,7 +8,7 @@
             <a href="/product" class="nav-link">Product</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="#" class="nav-link">Contact</a>
+            <a href="/category" class="nav-link">Category</a>
         </li>
     </ul>
 
