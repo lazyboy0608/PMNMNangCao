@@ -26,13 +26,13 @@ Route::prefix('')->group(function () {
 //Product Routes
 Route::prefix('product')->group(function () {
     Route::controller(ProductController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::get('/add', 'create')->name('add');
-        Route::post('/store', 'store')->name('store');
-        Route::get('/{id?}', 'show')->name('detail');
-        Route::get('/edit/{id?}', 'edit')->name('edit');
-        Route::post('/update/{id?}', 'update')->name('update');
-        Route::delete('/delete/{id?}', 'destroy')->name('delete');
+        Route::get('/', 'index')->name('product.index');
+        Route::get('/add', 'create')->name('product.create');
+        Route::post('/store', 'store')->name('product.store');
+        // Route::get('/{id?}', 'show')->name('product.show');
+        Route::get('/edit/{id?}', 'edit')->name('product.edit');
+        Route::post('/update/{id?}', 'update')->name('product.update');
+        Route::delete('/delete/{id?}', 'destroy')->name('product.destroy');
     });
 });
 //Category Routes

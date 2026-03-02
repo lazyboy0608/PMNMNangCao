@@ -55,6 +55,14 @@ class Category extends Model
     }
 
     /**
+     * Get all products in this category
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    /**
      * Boot the model
      */
 }

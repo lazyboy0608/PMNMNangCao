@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\CheckTimeAccess;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
 class ProductController extends Controller implements HasMiddleware
@@ -13,15 +14,32 @@ class ProductController extends Controller implements HasMiddleware
     {
         return [CheckTimeAccess::class];
     }
+    
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
         $title = "Product List";
-        $product = Product::all();
-        return view('admin.product.index', ['products' => $product, 'title' => $title]);
+        $query = Product::with('category');
+        
+        // Filter by keyword or category if provided
+        if ($request->has('keyword') && $request->keyword) {
+            $query->where('name', 'like', '%' . $request->keyword . '%');
+        }
+        
+        if ($request->has('category') && $request->category) {
+            $query->where('category_id', $request->category);
+        }
+        
+        $products = $query->get();
+        $categories = Category::all();
+        
+        return view('admin.product.index', [
+            'products' => $products,
+            'title' => $title,
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -29,9 +47,10 @@ class ProductController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        //
         $title = "Add Product";
-        return view('admin.product.add', ['title' => $title]);
+        $categories = Category::all();
+        
+        return view('admin.product.add', ['title' => $title, 'categories' => $categories]);
     }
 
     /**
@@ -39,35 +58,62 @@ class ProductController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
-        //
-        $product = new Product;
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
-        $product->save();
-        return redirect('/product');
+        $request->validate([
+            'name' => 'required',
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric|min:0',
+            'sale_price' => 'nullable|numeric|lte:price',
+            'stock' => 'required|integer|min:0',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image',
+            'is_active' => 'boolean',
+        ]);
+        
+        $data = $request->all();
+        
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            $data['image'] = $imagePath;
+        }
+        
+        Product::create($data);
+        
+        return redirect('/product')->with('success', 'Product created successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-        $title = "Product Detail";
-        $product = Product::find($id);
-        return view('admin.product.detail', ['product' => $product, 'title' => $title]);
-    }
+    // public function show(string $id)
+    // {
+    //     $title = "Product Detail";
+    //     $product = Product::with('category')->find($id);
+        
+    //     if (!$product) {
+    //         return redirect('/product')->with('error', 'Product not found');
+    //     }
+        
+    //     return view('admin.product.detail', ['product' => $product, 'title' => $title]);
+    // }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
         $title = "Edit Product";
         $product = Product::find($id);
-        return view('admin.product.edit', ['product' => $product, 'title' => $title]);
+        $categories = Category::all();
+        
+        if (!$product) {
+            return redirect('/product')->with('error', 'Product not found');
+        }
+        
+        return view('admin.product.edit', [
+            'product' => $product,
+            'title' => $title,
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -75,13 +121,33 @@ class ProductController extends Controller implements HasMiddleware
      */
     public function update(Request $request, string $id)
     {
-        //
         $product = Product::find($id);
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
-        $product->save();
-        return redirect('/product');
+        
+        if (!$product) {
+            return redirect('/product')->with('error', 'Product not found');
+        }
+        
+        $request->validate([
+            'name' => 'required',
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric|min:0',
+            'sale_price' => 'nullable|numeric|lte:price',
+            'stock' => 'required|integer|min:0',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image',
+            'is_active' => 'boolean',
+        ]);
+        
+        $data = $request->all();
+        
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            $data['image'] = $imagePath;
+        }
+        
+        $product->update($data);
+        
+        return redirect('/product')->with('success', 'Product updated successfully');
     }
 
     /**
@@ -89,9 +155,16 @@ class ProductController extends Controller implements HasMiddleware
      */
     public function destroy(string $id)
     {
-        //
         $product = Product::find($id);
-        $product->delete();
-        return redirect('/product');
+        
+        if (!$product) {
+            return redirect('/product')->with('error', 'Product not found');
+        }
+        
+        // Soft delete - set is_delete to 1
+        $product->is_delete = 1;
+        $product->save();
+        
+        return redirect('/product')->with('success', 'Product deleted successfully');
     }
 }
